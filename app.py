@@ -1,11 +1,21 @@
+import os
 from flask import Flask, render_template
 from pymongo import MongoClient
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
-# Connect to MongoDB Atlas
-client = MongoClient("mongodb+srv://donbasilpeter:jpNsN9iYPXAPu7fJ@shop-db.erft9.mongodb.net/?retryWrites=true&w=majority&appName=shop-db")
-db = client['shop_db']
+# Get MongoDB credentials from environment variables
+mongo_user = os.getenv("MONGO_USER")
+mongo_password = os.getenv("MONGO_PASSWORD")
+mongo_db = os.getenv("MONGO_DB")
+
+# Connect to MongoDB Atlas using environment variables
+client = MongoClient(f"mongodb+srv://{mongo_user}:{mongo_password}@shop-db.erft9.mongodb.net/?retryWrites=true&w=majority&appName={mongo_db}")
+db = client[mongo_db]
 products_collection = db['products']
 
 # Homepage route
